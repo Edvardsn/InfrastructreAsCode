@@ -1,0 +1,56 @@
+# TODO: Lag cluster, configmap, deploy db, deploy flask, fortsatt prøv uten db først
+
+# The deployment of the Flask webserver
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-webserver
+  template:
+    metadata:
+      labels:
+        app: flask-webserver
+    secret:
+      - name: flask-config
+    spec:
+      containers:
+      - name: webserver
+        image: gcr.io/skytjenester/flask-webserver:latest
+        env:
+        - name: port
+          value: $(WEBSERVER-PORT)
+
+        - name: db_name
+          value: $(DB_NAME)
+
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: postgres-db1-credentials
+              key: username
+
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-db1-credentials
+              key: password
+---
+
+# The service to be exposed externally
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  selector:
+    app: flask
+  ports:
+    - protocol: TCP
+      port: 80
+  type: LoadBalancer  
+
