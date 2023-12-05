@@ -9,14 +9,15 @@ jobs:
   build-and-deploy:
     # Arbituary version that is LTS.
     runs-on: ubuntu-20.04
-  # Enviroment varaibles primarily used for authentication
-    env:
-      # Secrets
-      SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-      TF_VAR_AUTH: ${{secrets.GOOGLE_CREDENTIALS}}
+
+    # Enviroment varaibles primarily used for authentication
+    # env:
+      # # Secrets
+      # SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+      # TF_VAR_AUTH: ${{secrets.GOOGLE_CREDENTIALS}}
       
-      # Public
-      TF_VAR_SSH_PUB_KEY: ${{env.SSH_PUB_KEY}}
+      # # Public
+      # TF_VAR_SSH_PUB_KEY: ${{env.SSH_PUB_KEY}}
 
     steps:
     - name: Checkout repository
@@ -83,6 +84,6 @@ jobs:
         sudo systemctl start docker
         sudo systemctl enable docker
 
-        sudo docker login -u $DOCKER_USERNAME -p $DOCKER_ACCESS_TOKEN
-        sudo docker pull $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:latest
-        sudo docker run -p 5000:5000 -e WEBSERVER_PORT=5000 $DOCKER_USERNAME/$DOCKER_IMAGE_NAME
+        sudo docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{env.DOCKER_ACCESS_TOKEN}}
+        sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{env.DOCKER_IMAGE_NAME}}:latest
+        sudo docker run -p 5000:5000 -e WEBSERVER_PORT=5000 ${{secrets.DOCKER_USERNAME}}/${{env.DOCKER_IMAGE_NAME}}
