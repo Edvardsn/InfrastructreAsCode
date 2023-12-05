@@ -36,10 +36,9 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
-    # # Initializes enviroment varaibles used in the Terraform configuration
-    # - name: Initialize enviroment varaibles
-    #   run: | 
-    #    export GOOGLE_CLOUD_KEYFILE_JSON=${{secrets.GOOGLE_CREDENTIALS}} 
+    # Initialize Terraform
+    - name: Terraform Init
+      run: terraform init
 
     # Create the resources
     - name: Terraform plan
