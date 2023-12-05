@@ -42,11 +42,7 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    # Plan what resources to use
-    - name: Terraform Plan
-      run: terraform plan
-
-    # Communicate to create the resources
+    # Create the resources
     - name: Terraform Apply
       run: terraform apply -auto-approve
 
