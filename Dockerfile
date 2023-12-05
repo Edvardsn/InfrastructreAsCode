@@ -31,9 +31,11 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Switch to the non-privileged user to run the application.
 USER appuser
 
-# Copies everything in the current directory to the current directory in the container.
+# Copies everything in the project directory to the current directory in the container.
 # In this case, everything in the project directory here will be copied into the root folder of the container.
 COPY . .
+
+EXPOSE 5000
 
 # Run the application.
 CMD ["python", "app.py"]

@@ -4,6 +4,8 @@
 # For more help, visit the .dockerignore file reference guide at
 # https://docs.docker.com/engine/reference/builder/#dockerignore-file
 
+# Files to be ignored when creating image
+
 .env
 /terraform
 /k8s
@@ -16,6 +18,7 @@
 /.env
 /.git
 /.gitignore
+/.github
 /.project
 /.settings
 /.toolstarget
