@@ -35,16 +35,19 @@ jobs:
     # Terraform 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: 1.0.10
-
-    # Intitialize Terraform
-    - name: Terraform Init
-      run: terraform init
 
     # Create the resources
     - name: Terraform Apply
-      run: terraform apply -auto-approve
+      run: | 
+       echo Planning 
+       terraform plan
+
+    # Create the resources
+    - name: Terraform Apply
+      run: | 
+       echo Applying 
+       terraform apply -auto-approve
+       echo Applied
 
     # Retrives the IP from the VM as it is ephemeral this is done after the terraform process
     - name: Get the VM IP Address
