@@ -39,20 +39,20 @@ jobs:
     # Initializes enviroment varaibles used in the Terraform configuration
     - name: Initialize enviroment varaibles
       run: | 
-       echo ${{secrets.GOOGLE_CREDENTIALS}} > gcp_credentials.json
+       export GOOGLE_CLOUD_KEYFILE_JSON=${{secrets.GOOGLE_CREDENTIALS}} 
 
     # Create the resources
     - name: Terraform plan
-      env:
-        GOOGLE_CLOUD_KEYFILE_JSON: ./gcp_credentials.json
+      # env:
+      #   GOOGLE_CLOUD_KEYFILE_JSON: ./gcp_credentials.json
       run: | 
        echo "planning will now start"
        terraform plan -var "${{vars.ssh_pub_key}}"
 
     # Create the resources
     - name: Terraform Apply
-      env:
-        GOOGLE_CLOUD_KEYFILE_JSON: ./gcp_credentials.json
+      # env:
+      #   GOOGLE_CLOUD_KEYFILE_JSON: ./gcp_credentials.json
 
       run: | 
        echo Applying 
