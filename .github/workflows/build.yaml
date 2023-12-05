@@ -36,28 +36,25 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
-    # Initializes enviroment varaibles used in the Terraform configuration
-    - name: Initialize enviroment varaibles
-      run: | 
-       export GOOGLE_CLOUD_KEYFILE_JSON=${{secrets.GOOGLE_CREDENTIALS}} 
+    # # Initializes enviroment varaibles used in the Terraform configuration
+    # - name: Initialize enviroment varaibles
+    #   run: | 
+    #    export GOOGLE_CLOUD_KEYFILE_JSON=${{secrets.GOOGLE_CREDENTIALS}} 
 
     # Create the resources
     - name: Terraform plan
-      # env:
-      #   GOOGLE_CLOUD_KEYFILE_JSON: ./gcp_credentials.json
+      env:
+        GOOGLE_CREDENTIALS: ${{secrets.GOOGLE_CREDENTIALS}}
       run: | 
        echo "planning will now start"
-       terraform plan -var "${{vars.ssh_pub_key}}"
+       terraform plan -var "${{vars.SSH_PUB_KEY}}"
 
     # Create the resources
     - name: Terraform Apply
-      # env:
-      #   GOOGLE_CLOUD_KEYFILE_JSON: ./gcp_credentials.json
-
+      env:
+        GOOGLE_CLOUD_KEYFILE_JSON: ${{secrets.GOOGLE_CREDENTIALS}}
       run: | 
-       echo Applying 
        terraform apply -auto-approve
-       echo Applied
 
     # Retrives the IP from the VM as it is ephemeral this is done after the terraform process
     - name: Get the VM IP Address
