@@ -10,7 +10,6 @@ provider "google" {
 }
 
 # The virual machine
-# TODO public ssh key med github env
 resource "google_compute_instance" "skytjenester_vm" {
   name         = "skytjenester-vm"
   machine_type = "f1-micro"
@@ -29,7 +28,7 @@ resource "google_compute_instance" "skytjenester_vm" {
 
   # Links the instace to the subnet for IP adresses
   network_interface {
-    # subnetwork = google_compute_subnetwork.default.id
+    subnetwork = google_compute_subnetwork.default.id
 
     # Left empty to signal GCP to assign an IP
     access_config {
