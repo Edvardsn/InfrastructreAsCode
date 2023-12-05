@@ -1,3 +1,7 @@
+
+
+
+
 # Varaible for GCP authentication
 variable "AUTH" {
   type = string
@@ -7,8 +11,6 @@ variable "AUTH" {
 variable "SSH_PUB_KEY" {
   type = string
 }
-
-
 # Information related to the provider
 provider "google" {
   credentials = var.AUTH

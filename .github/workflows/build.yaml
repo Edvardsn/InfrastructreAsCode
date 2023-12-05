@@ -39,12 +39,10 @@ jobs:
     # Create the resources
     - name: Terraform Plan
       run: | 
-       TF_VAR_AUTH=${{secrets.GOOGLE_CREDENTIALS}}
-       TF_VAR_SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}
-       echo Planning 
-       echo $TF_VAR_AUTH
-       echo $TF_VAR_SSH_PUB_KEY
-       echo terraform plan
+       export TF_VAR_AUTH=${{secrets.GOOGLE_CREDENTIALS}}
+       export TF_VAR_SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}
+       export TF_LOG=trace
+       echo "Planning will now start"
        terraform plan
 
     # Create the resources
