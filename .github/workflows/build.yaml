@@ -46,11 +46,12 @@ jobs:
         GOOGLE_CREDENTIALS: ${{secrets.GOOGLE_CREDENTIALS}}
       run: | 
        echo "planning will now start"
-       terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}"
+       terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -out
 
     # Create the resources
     - name: Terraform Apply
       env:
+        TF_LOG: trace
         GOOGLE_CLOUD_KEYFILE_JSON: ${{secrets.GOOGLE_CREDENTIALS}}
       run: | 
        terraform apply -auto-approve
