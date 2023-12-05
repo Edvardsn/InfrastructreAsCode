@@ -1,14 +1,7 @@
-# Varaible for GCP authentication
-# variable "AUTH" {
-#   type    = string
-#   default = "value"
-# }
-
 # The public SSH key to assign to the VM
 variable "SSH_PUB_KEY" {
   type = string
 }
-
 
 # Information related to the provider
 provider "google" {
@@ -48,30 +41,7 @@ resource "google_compute_instance" "skytjenester_vm" {
   metadata = {
     ssh-keys = var.SSH_PUB_KEY
   }
-
-  # Bruk env varaibler
-  # metadata = {
-  #   ssh-keys = "Pette:${file("~/.ssh/skytjenester.pub")}"
-  # }
-
 }
-
-# # Database instance to be created 
-# resource "google_sql_database_instance" "skytjenester_db" {
-#   name             = "skytjenester-db"
-#   region           = "europe-west1"
-#   database_version = "POSTGRES_14"
-
-#   settings {
-#     tier = "db-f1-micro" # Free tier usage
-#   }
-#   # ip_configuration {
-#   #   ipv4_enabled    = true
-#   #   private_network = google_compute_network.my_network.self_link # Link to the VPC (network)
-#   #   require_ssl     = true
-#   # }
-
-# }
 
 # Network 
 resource "google_compute_network" "vpc_network" {
