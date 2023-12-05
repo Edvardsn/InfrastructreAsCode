@@ -9,15 +9,14 @@ jobs:
   build-and-deploy:
     # Arbituary version that is LTS.
     runs-on: ubuntu-20.04
-
   # Enviroment varaibles primarily used for authentication
     env:
       # Secrets
-      SSH_PRIVATE_KEY: = ${{secrets.SSH_PRIVATE_KEY}}
-      TF_VAR_AUTH: = ${{secrets.GOOGLE_CREDENTIALS}}
+      SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+      TF_VAR_AUTH: ${{secrets.GOOGLE_CREDENTIALS}}
       
       # Public
-      TF_VAR_SSH_PUB_KEY: =  ${{env.SSH_PUB_KEY}}
+      TF_VAR_SSH_PUB_KEY: ${{env.SSH_PUB_KEY}}
 
     steps:
     - name: Checkout repository
