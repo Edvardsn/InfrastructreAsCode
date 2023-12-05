@@ -36,29 +36,24 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
-    # - name: Set up SSH public key
-    #   run: TF_VAR_SSH_PUB_KEY=${{vars.SSH_PUB_KEY}} 
-
-    # - name: Set up Google credentials
-    #   run: export TF_VAR_AUTH="${{secrets.GOOGLE_CREDENTIALS}}"
-
-
-    # - name: Set up Logging
-    #   run: TF_LOG=trace
-
-    # create the resources
+    # Initializes enviroment varaibles used in the Terraform configuration
     - name: Initialize enviroment varaibles
       run: | 
-       export GOOGLE_CLOUD_KEYFILE_JSON=${{secrets.GOOGLE_CREDENTIALS}}
+       echo ${{secrets.GOOGLE_CREDENTIALS}} > gcp_credentials.json
 
-    # create the resources
-    - name: terraform plan
+    # Create the resources
+    - name: Terraform plan
+      env:
+        GOOGLE_CLOUD_KEYFILE_JSON: ./gcp_credentials.json
       run: | 
        echo "planning will now start"
        terraform plan -var "${{vars.ssh_pub_key}}"
 
     # Create the resources
     - name: Terraform Apply
+      env:
+        GOOGLE_CLOUD_KEYFILE_JSON: ./gcp_credentials.json
+
       run: | 
        echo Applying 
        terraform apply -auto-approve
