@@ -15,31 +15,36 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     
-    # Builds and pushes the docker image to the Docker Hub
-    - name: Build and push Docker image
+    # # Builds and pushes the docker image to the Docker Hub
+    # - name: Build and push Docker image
           
-      run: |
-        docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_ACCESS_TOKEN}}
+    #   run: |
+    #     docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_ACCESS_TOKEN}}
 
-        docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}
+    #     docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}
 
-        docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
+    #     docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
 
-    # Google cloud authenticaiton
-    - name: Set up Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@v1
-      with:
-        service_account_key: ${{secrets.GOOGLE_CREDENTIALS}}
-        project_id: skytjenester
+    # # Google cloud authenticaiton
+    # - name: Set up Google Cloud SDK
+    #   uses: google-github-actions/setup-gcloud@v1
+    #   with:
+    #     service_account_key: ${{secrets.GOOGLE_CREDENTIALS}}
+    #     project_id: skytjenester
 
     # Terraform 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
     # Create the resources
-    - name: Terraform Apply
+    - name: Terraform Plan
       run: | 
+       TF_VAR_AUTH=${{secrets.GOOGLE_CREDENTIALS}}
+       TF_VAR_SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}
        echo Planning 
+       echo $TF_VAR_AUTH
+       echo $TF_VAR_SSH_PUB_KEY
+       echo terraform plan
        terraform plan
 
     # Create the resources
