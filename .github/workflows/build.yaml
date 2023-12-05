@@ -46,11 +46,16 @@ jobs:
     # - name: Set up Logging
     #   run: TF_LOG=trace
 
-    # Create the resources
-    - name: Terraform Plan
+    # create the resources
+    - name: Initialize enviroment varaibles
       run: | 
-       echo "Planning will now start"
-       terraform plan -var "AUTH=${{secrets.GOOGLE_CREDENTIALS}}" -var "${{vars.SSH_PUB_KEY}}"
+       export GOOGLE_CLOUD_KEYFILE_JSON=${{secrets.GOOGLE_CREDENTIALS}}
+
+    # create the resources
+    - name: terraform plan
+      run: | 
+       echo "planning will now start"
+       terraform plan -var "${{vars.ssh_pub_key}}"
 
     # Create the resources
     - name: Terraform Apply

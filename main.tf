@@ -1,8 +1,8 @@
 # Varaible for GCP authentication
-variable "AUTH" {
-  type    = string
-  default = "value"
-}
+# variable "AUTH" {
+#   type    = string
+#   default = "value"
+# }
 
 # The public SSH key to assign to the VM
 variable "SSH_PUB_KEY" {
@@ -12,9 +12,8 @@ variable "SSH_PUB_KEY" {
 
 # Information related to the provider
 provider "google" {
-  credentials = var.AUTH
-  project     = "skytjenester"
-  region      = "europe-west1"
+  project = "skytjenester"
+  region  = "europe-west1"
 }
 
 # The virual machine
