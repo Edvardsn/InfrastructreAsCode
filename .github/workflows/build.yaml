@@ -25,12 +25,12 @@ jobs:
 
     #     docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
 
-    # # Google cloud authenticaiton
-    # - name: Set up Google Cloud SDK
-    #   uses: google-github-actions/setup-gcloud@v1
-    #   with:
-    #     service_account_key: ${{secrets.GOOGLE_CREDENTIALS}}
-    #     project_id: skytjenester
+    # Google cloud authenticaiton
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        service_account_key: ${{secrets.GOOGLE_CREDENTIALS}}
+        project_id: skytjenester
 
     # Terraform 
     - name: Set up Terraform
