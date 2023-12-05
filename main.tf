@@ -1,16 +1,15 @@
-
-
-
-
 # Varaible for GCP authentication
 variable "AUTH" {
-  type = string
+  type    = string
+  default = "value"
 }
 
 # The public SSH key to assign to the VM
 variable "SSH_PUB_KEY" {
   type = string
 }
+
+
 # Information related to the provider
 provider "google" {
   credentials = var.AUTH
