@@ -35,7 +35,11 @@ USER appuser
 # In this case, everything in the project directory here will be copied into the root folder of the container.
 COPY . .
 
+# Exposes the port where the server will listen
 EXPOSE 5000
+
+# Runs the tests
+RUN python3 app.test.py
 
 # Run the application.
 CMD ["python", "app.py"]

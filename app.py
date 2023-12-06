@@ -8,7 +8,14 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    return "<h1>This is built with Continous deployment<h1><p> And includes semi-robust code<p>"
+    return "<h1>This is a webserver built with a Continous deployment pipeline!<h1>"
+
+
+@app.route("/")
+def default(page):
+    response = make_response("The page %s does not exist." % page, 404)
+
+    return response
 
 
 print("Webserver listening on port: ", os.environ["WEBSERVER_PORT"])
