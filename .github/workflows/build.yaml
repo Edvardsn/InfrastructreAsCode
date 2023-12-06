@@ -49,7 +49,7 @@ jobs:
 
       # Check the remote state
       - name: Terraform Refresh  
-        run: terraform refresh -input=false
+        run: terraform refresh -input=false -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}"
 
       # Create the resources
       - name: Terraform Plan
