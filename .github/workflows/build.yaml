@@ -45,14 +45,14 @@ jobs:
 
       # Initialize Terraform
       - name: Terraform Initialize  
-        run: terraform init -input=false
+        run: terraform init -input=false -backend-config="bucket=${{secrets.TF_BACKEND_BUCKET}}"
 
       # Plan again idk
       - name: Terraform Plan
         env:
           GOOGLE_CREDENTIALS: ${{secrets.GOOGLE_CREDENTIALS}}
         run: | 
-         terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -input=false -refresh=true -lock=false
+         terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -input=false 
 
       # Creates or updates the resources given the current state 
       - name: Terraform Apply
