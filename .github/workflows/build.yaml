@@ -78,7 +78,7 @@ jobs:
       - name: SSH and run the new application
         uses: appleboy/ssh-action@v1.0.0
         with:
-            host: ${{vars.VM_IP}}
+            host: $VM_IP
             username: ${{vars.SSH_USERNAME}}
             passphrase: ${{secrets.SSH_PASSPHRASE}}
             # password: ${{secrets.SSH_PASSPHRASE}}
