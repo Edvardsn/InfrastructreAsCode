@@ -3,6 +3,10 @@ variable "SSH_PUB_KEY" {
   type = string
 }
 
+# The zone which the resources should be created in
+variable "ZONE" {
+  type = string
+}
 # Information related to the provider
 provider "google" {
   project = "skytjenester"
@@ -13,7 +17,7 @@ provider "google" {
 resource "google_compute_instance" "skytjenester_vm" {
   name         = "skytjenester-vm"
   machine_type = "f1-micro"
-  zone         = "europe-west1-c"
+  zone         = var.ZONE
 
   boot_disk {
     initialize_params {
