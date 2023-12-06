@@ -72,7 +72,7 @@ jobs:
     # Runs the new application version
     - name: SSH and run the new application
       run: |
-        ssh -i ${{secrets.SSH_PRIVATE_KEY}} admin@${{vars.VM_IP}}
+        ssh -i ${{secrets.SSH_PRIVATE_KEY}} admin@$VM_IP
         
         sudo apt update
         sudo apt install -y docker.io
