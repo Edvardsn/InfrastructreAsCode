@@ -71,14 +71,6 @@ jobs:
           VM_IP=$(gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} --format='value(networkInterfaces[0].accessConfigs[0].natIP)')
           echo "VM_IP=$VM_IP" >> $GITHUB_ENV
       
-      # # Configures SSH on the Github VM
-      # - name: Configure SSH
-      #   run: |
-      #       mkdir -p ~/.ssh/
-      #       echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      #       chmod 600 ~/.ssh/id_rsa
-      #       ssh-keyscan github.com >> ~/.ssh/known_hosts
-      #       chmod 644 ~/.ssh/known_hosts
       
       # Runs the new application version
       - name: SSH and run the new application
@@ -88,7 +80,7 @@ jobs:
             username: ${{vars.SSH_USERNAME}}
             passphrase: ${{secrets.SSH_PASSPHRASE}}
             # password: ${{secrets.SSH_PASSPHRASE}}
-            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
               sudo apt update
               sudo apt install -y docker.io
