@@ -28,12 +28,13 @@ jobs:
     # Google cloud CLI
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
+      with: 
+        project_id: '${{vars.GOOGLE_PROJECT_NAME}}'
 
     # Google cloud authenticaiton
     - name: Set up Google Cloud SDK
       uses: google-github-actions/auth@v2
       with:
-            project_id: '${{vars.GOOGLE_PROJECT_NAME}}'
             credentials_json: "${{secrets.GOOGLE_CREDENTIALS}}"
 
 
