@@ -56,7 +56,7 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{secrets.GOOGLE_CREDENTIALS}}
         run: | 
-         terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -input=false -state="gs://${{vars.TF_BACKEND_BUCKET}}/default.tfstate"
+         terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -input=false -state="gs://${{secrets.TF_BACKEND_BUCKET}}/default.tfstate"
 
       # Creates or updates the resources given the current state 
       - name: Terraform Apply
