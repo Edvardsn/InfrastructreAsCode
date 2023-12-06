@@ -85,9 +85,9 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
             host: $VM_IP
-            # passphrase: ${{secrets.SSH_PASSPHRASE}}
             username: ${{vars.SSH_USERNAME}}
-            password: ${{secrets.SSH_PASSPHRASE}}
+            passphrase: ${{secrets.SSH_PASSPHRASE}}
+            # password: ${{secrets.SSH_PASSPHRASE}}
             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
               sudo apt update
