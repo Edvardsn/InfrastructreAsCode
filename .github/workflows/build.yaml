@@ -82,7 +82,7 @@ jobs:
       
       # Runs the new application version
       - name: SSH and run the new application
-        uses: webfactory/ssh-agent@v0.5.3
+        uses: appleboy/ssh-action@v1.0.0
         with:
             host: $VM_IP
             username: ${{vars.SSH_USERNAME}}
