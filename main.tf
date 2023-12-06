@@ -38,7 +38,6 @@ resource "google_compute_instance" "skytjenester_vm" {
 
   # Links the instace to the subnet for IP adresses
   network_interface {
-    network    = google_compute_network.vpc_network.id
     subnetwork = google_compute_subnetwork.default.id
 
     # Left empty to signal GCP to assign an IP
@@ -48,9 +47,7 @@ resource "google_compute_instance" "skytjenester_vm" {
 
   }
   metadata = {
-    ssh-keys = "{}"
-
-
+    ssh-keys = var.SSH_PUB_KEY
   }
 }
 
