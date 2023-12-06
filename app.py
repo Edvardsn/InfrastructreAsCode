@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    return "<h1>This is built with Continous deployment<h1><p> And includes robust code.<p>"
+    return "<h1>This is built with Continous deployment<h1><p> And includes semi-robust code<p>"
 
 
 print("Webserver listening on port: ", os.environ["WEBSERVER_PORT"])
