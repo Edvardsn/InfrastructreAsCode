@@ -39,7 +39,7 @@ COPY . .
 EXPOSE 5000
 
 # Runs the tests
-RUN python3 app.test.py
+RUN python3 app._test.py
 
 # Run the application.
 CMD ["python", "app.py"]
