@@ -77,7 +77,6 @@ jobs:
       # Runs the new application version
       - name: SSH and run the new application
         uses: appleboy/ssh-action@v1.0.0
-        env:
         with:
             host: ${{vars.VM_IP}}
             username: ${{vars.SSH_USERNAME}}
