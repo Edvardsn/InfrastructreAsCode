@@ -47,9 +47,9 @@ jobs:
       - name: Terraform Initialize  
         run: terraform init -input=false -backend-config="bucket=${{secrets.TF_BACKEND_BUCKET}}"
 
-      # Show Terraform
-      - name: Terraform State  
-        run: terraform show default.tfstate terraform refresh -input=false
+      # # Show Terraform
+      # - name: Terraform State  
+      #   run: terraform show default.tfstate 
 
       # Plan resources to create
       - name: Terraform Plan
