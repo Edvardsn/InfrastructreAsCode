@@ -39,7 +39,7 @@ COPY . .
 EXPOSE 5000
 
 # Runs the tests
-RUN python3 app._test.py -e WEBSERVER_PORT=5000
+RUN python3 app._test.py 
 
 # Run the application.
 CMD ["python", "app.py"]
