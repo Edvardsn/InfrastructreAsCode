@@ -57,14 +57,18 @@ jobs:
         run: | 
          terraform apply -auto-approve -input=false -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -state="gs://${TF_BACKEND_BUCKET}/default.tfstate"
 
-      # Retrives the IP from the VM 
-      - name: Extract VM's external IP adress
+      # Retrives the IP from the VM as it is ephemeral this is done after the terraform process
+      - name: Get the VM IP Address and do ssh
         id: get-vm-ip
         run: |
+          echo gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} 
           VM_IP=$(gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} --format='value(networkInterfaces[0].accessConfigs[0].natIP)')
+          echo "VM_IP=$VM_IP" >> $GITHUB_ENV
+          echo $VM_IP
+          
       
       # Runs the new application version
-      - name: SSH to pull and build new Docker image
+      - name: SSH and run the new application
         uses: appleboy/ssh-action@v1.0.0
         with:
             host: ${{env.VM_IP}}
