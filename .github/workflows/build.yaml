@@ -13,18 +13,14 @@ jobs:
     environment: skytjenester-H23
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v2
       
       # Builds and pushes the docker image to the Docker Hub
       - name: Build and push Docker image
-            
         run: |
           docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_ACCESS_TOKEN}}
-
           docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}
-
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
 
       # Google cloud CLI
@@ -77,15 +73,17 @@ jobs:
         with:
             host: ${{env.VM_IP}}
             username: ${{vars.SSH_USERNAME}}
-            # passphrase: ${{secrets.SSH_PASSPHRASE}}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
               sudo apt update
               sudo apt install -y docker.io
+
+              sudo systemctl stop docker
               sudo systemctl start docker
               sudo systemctl enable docker
 
+              sudo docker rm ${{vars.DOCKER_CONTAINER_NAME}}
               sudo docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{vars.DOCKER_ACCESS_TOKEN}}
               sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}:latest
-              sudo docker run -p 5000:5000 -e WEBSERVER_PORT=5000 ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}
+              sudo docker run -p 5000:5000 -e WEBSERVER_PORT=5000 --name ${{vars.DOCKER_CONTAINER_NAME}} ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}
               exit
