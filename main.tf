@@ -48,7 +48,9 @@ resource "google_compute_instance" "skytjenester_vm" {
 
   }
   metadata = {
-    "ssh-keys" = var.SSH_PUB_KEY
+    ssh-keys = "{}"
+
+
   }
 }
 
