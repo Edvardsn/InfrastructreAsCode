@@ -47,10 +47,6 @@ jobs:
       - name: Terraform Initialize  
         run: terraform init -input=false -backend-config="bucket=${{secrets.TF_BACKEND_BUCKET}}"
 
-      # Show Terraform
-      - name: Terraform State  
-        run: terraform show 
-
       # Plan resources to create
       - name: Terraform Plan
         env:
@@ -81,7 +77,7 @@ jobs:
         env:
           GOOGLE_CLOUD_KEYFILE_JSON: ${{secrets.GOOGLE_CREDENTIALS}}
         run: | 
-          glcoud compute ssh --project=${{vars.GOOGLE_PROJECT_NAME}} --zone=${{vars.GOOGLE_ZONE}} skytjenester-vm
+          gcloud compute ssh --project=${{vars.GOOGLE_PROJECT_NAME}} --zone=${{vars.GOOGLE_ZONE}} skytjenester-vm
 
           sudo apt update
           sudo apt install -y docker.io
