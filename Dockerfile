@@ -35,9 +35,6 @@ USER appuser
 # In this case, everything in the project directory here will be copied into the root folder of the container.
 COPY . .
 
-# Runs the tests
-# RUN python3 app._test.py 
-
 # Exposes the port where the server will listen
 EXPOSE 5000
 
