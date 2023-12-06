@@ -47,7 +47,7 @@ jobs:
       - name: Terraform Initialize  
         run: terraform init -input=false -backend-config="bucket=${{secrets.TF_BACKEND_BUCKET}}"
 
-      # Plan resources to create
+      # Plan resources to create test
       - name: Terraform Plan
         env:
           GOOGLE_CREDENTIALS: ${{secrets.GOOGLE_CREDENTIALS}}
