@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    return "This is built with a Continous Deployment pipeline!"
+    return "This is built with a Continious Deployment pipeline!"
 
 
 @app.route("/")
