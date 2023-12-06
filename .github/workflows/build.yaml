@@ -49,7 +49,7 @@ jobs:
 
       # Show Terraform
       - name: Terraform State  
-        run: echo terraform show terraform.tfstate 
+        run: terraform show default.tfstate 
 
       # Plan resources to create
       - name: Terraform Plan
