@@ -10,10 +10,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
-# Server variables
-ENV FLASK_APP=app.py 
-ENV FLASK_RUN_HOST=0.0.0.0
-
 WORKDIR /app
 
 # Create a non-privileged user that the app will run under.
@@ -39,11 +35,11 @@ USER appuser
 # In this case, everything in the project directory here will be copied into the root folder of the container.
 COPY . .
 
-# Exposes the port where the server will listen
-EXPOSE 5000
-
 # Runs the tests
 RUN python3 app._test.py 
+
+# Exposes the port where the server will listen
+EXPOSE 5000
 
 # Run the application.
 CMD ["python", "app.py"]

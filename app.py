@@ -18,6 +18,4 @@ def default(page):
 
 # Starts the server on localhost with port 80 as a default
 if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0", port=int(os.environ.get("WEBSERVER_PORT", 5000)), debug=True
-    )
+    app.run(host="0.0.0.0", port=int(os.environ.get("WEBSERVER_PORT", 5000)))
