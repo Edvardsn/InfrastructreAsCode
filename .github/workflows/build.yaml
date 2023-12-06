@@ -69,8 +69,8 @@ jobs:
         run: |
           echo gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} 
           VM_IP=$(gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} --format='value(networkInterfaces[0].accessConfigs[0].natIP)')
-          echo $VM_IP
           echo "VM_IP=$VM_IP" >> $GITHUB_ENV
+          echo $VM_IP
 
       
       
@@ -78,10 +78,9 @@ jobs:
       - name: SSH and run the new application
         uses: appleboy/ssh-action@v1.0.0
         with:
-            host: $VM_IP
+            host: ${{env.VM_IP}}
             username: ${{vars.SSH_USERNAME}}
             passphrase: ${{secrets.SSH_PASSPHRASE}}
-            # password: ${{secrets.SSH_PASSPHRASE}}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
               sudo apt update
