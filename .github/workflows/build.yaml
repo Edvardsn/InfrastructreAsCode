@@ -13,82 +13,86 @@ jobs:
     environment: skytjenester-H23
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    
-    # # Builds and pushes the docker image to the Docker Hub
-    # - name: Build and push Docker image
+      - uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      # # Builds and pushes the docker image to the Docker Hub
+      # - name: Build and push Docker image
+            
+      #   run: |
+      #     docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_ACCESS_TOKEN}}
+
+      #     docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}
+
+      #     docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
+
+      # Google cloud CLI
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with: 
+          project_id: '${{vars.GOOGLE_PROJECT_NAME}}'
+
+      # Google cloud authenticaiton
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/auth@v2
+        with:
+              credentials_json: "${{secrets.GOOGLE_CREDENTIALS}}"
+
+
+      # # Terraform 
+      # - name: Set up Terraform
+      #   uses: hashicorp/setup-terraform@v1
+
+      # # Initialize Terraform
+      # - name: Terraform Init
+      #   run: terraform init -input=false
+
+      # # Create the resources
+      # - name: Terraform plan
+      #   env:
+      #     GOOGLE_CREDENTIALS: ${{secrets.GOOGLE_CREDENTIALS}}
+      #   run: | 
+      #    echo "planning will now start"
+      #    terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -input=false 
+
+      # # Creates or updates the resources given the current state 
+      # - name: Terraform Apply
+      #   env:
+      #     GOOGLE_CLOUD_KEYFILE_JSON: ${{secrets.GOOGLE_CREDENTIALS}}
+      #   run: | 
+      #    terraform apply -auto-approve -input=false -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -refresh-only
+
+      # Retrives the IP from the VM as it is ephemeral this is done after the terraform process
+      - name: Get the VM IP Address
+        id: get-vm-ip
+        run: |
+          echo gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} 
+          VM_IP=$(gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} --format='value(networkInterfaces[0].accessConfigs[0].natIP)')
+          echo "VM_IP=$VM_IP" >> $GITHUB_ENV
+      
+      # # Configures SSH on the Github VM
+      # - name: Configure SSH
+      #   run: |
+      #       mkdir -p ~/.ssh/
+      #       echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      #       chmod 600 ~/.ssh/id_rsa
+      #       ssh-keyscan github.com >> ~/.ssh/known_hosts
+      #       chmod 644 ~/.ssh/known_hosts
+      
+      # Runs the new application version
+      - name: SSH and run the new application
+        run: |
+          ssh -i ~/.ssh/id_rsa admin@$VM_IP
           
-    #   run: |
-    #     docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_ACCESS_TOKEN}}
+          sudo apt update
+          sudo apt install -y docker.io
+          sudo systemctl start docker
+          sudo systemctl enable docker
 
-    #     docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}
-
-    #     docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
-
-    # Google cloud CLI
-    - name: Set up Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@v1
-      with: 
-        project_id: '${{vars.GOOGLE_PROJECT_NAME}}'
-
-    # Google cloud authenticaiton
-    - name: Set up Google Cloud SDK
-      uses: google-github-actions/auth@v2
-      with:
-            credentials_json: "${{secrets.GOOGLE_CREDENTIALS}}"
-
-
-    # # Terraform 
-    # - name: Set up Terraform
-    #   uses: hashicorp/setup-terraform@v1
-
-    # # Initialize Terraform
-    # - name: Terraform Init
-    #   run: terraform init -input=false
-
-    # # Create the resources
-    # - name: Terraform plan
-    #   env:
-    #     GOOGLE_CREDENTIALS: ${{secrets.GOOGLE_CREDENTIALS}}
-    #   run: | 
-    #    echo "planning will now start"
-    #    terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -input=false 
-
-    # # Creates or updates the resources given the current state 
-    # - name: Terraform Apply
-    #   env:
-    #     GOOGLE_CLOUD_KEYFILE_JSON: ${{secrets.GOOGLE_CREDENTIALS}}
-    #   run: | 
-    #    terraform apply -auto-approve -input=false -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -refresh-only
-
-    # Retrives the IP from the VM as it is ephemeral this is done after the terraform process
-    - name: Get the VM IP Address
-      id: get-vm-ip
-      run: |
-        echo gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} 
-        VM_IP=$(gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} --format='value(networkInterfaces[0].accessConfigs[0].natIP)')
-        echo "VM_IP=$VM_IP" >> $GITHUB_ENV
-    
-    # Configures SSH on the Github VM
-    - name: Configure SSH
-      run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-    
-    # Runs the new application version
-    - name: SSH and run the new application
-      run: |
-        ssh -i ~/.ssh/id_rsa admin@$VM_IP
-        
-        sudo apt update
-        sudo apt install -y docker.io
-        sudo systemctl start docker
-        sudo systemctl enable docker
-
-        sudo docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{vars.DOCKER_ACCESS_TOKEN}}
-        sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}:latest
-        sudo docker run -p 5000:5000 -e WEBSERVER_PORT=5000 ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}
+          sudo docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{vars.DOCKER_ACCESS_TOKEN}}
+          sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}:latest
+          sudo docker run -p 5000:5000 -e WEBSERVER_PORT=5000 ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}
