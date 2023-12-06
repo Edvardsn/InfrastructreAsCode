@@ -1,3 +1,9 @@
+terraform {
+  backend "gcs" {
+    bucket = "skytjenester-bucket"
+  }
+}
+
 # The public SSH key to assign to the VM
 variable "SSH_PUB_KEY" {
   type = string
