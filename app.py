@@ -1,14 +1,12 @@
-import json
 from flask import Flask
-import psycopg2
-import os
+from flask import make_response
 
 app = Flask(__name__)
 
 
 @app.route("/")
 def hello_world():
-    return "<h1>This is a webserver built with a Continous deployment pipeline!<h1>"
+    return "This is a webserver built with a Continous Deployment pipeline!"
 
 
 @app.route("/")
@@ -20,4 +18,6 @@ def default(page):
 
 # Starts the server on localhost with port 80 as a default
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("WEBSERVER_PORT", 5000)))
+    app.run(
+        host="0.0.0.0", port=int(os.environ.get("WEBSERVER_PORT", 5000)), debug=True
+    )
