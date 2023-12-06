@@ -47,24 +47,13 @@ jobs:
       - name: Terraform Initialize  
         run: terraform init -input=false
 
-
-      # Create the resources
-      - name: Terraform Plan
-        env:
-          GOOGLE_CREDENTIALS: ${{secrets.GOOGLE_CREDENTIALS}}
-        run: | 
-         terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -input=false 
-
-      # Check the remote state
-      - name: Terraform Refresh  
-        run: terraform refresh -input=false -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}"
-
       # Plan again idk
       - name: Terraform Plan
         env:
           GOOGLE_CREDENTIALS: ${{secrets.GOOGLE_CREDENTIALS}}
         run: | 
-         terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -input=false 
+         terraform plan -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -input=false -refresh=true -lock=false
+
       # Creates or updates the resources given the current state 
       - name: Terraform Apply
         env:
