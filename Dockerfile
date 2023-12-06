@@ -10,6 +10,10 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
+# Server variables
+ENV FLASK_APP=app.py 
+ENV FLASK_RUN_HOST=0.0.0.0
+
 WORKDIR /app
 
 # Create a non-privileged user that the app will run under.
