@@ -70,34 +70,21 @@ jobs:
           echo "VM_IP=$VM_IP" >> $GITHUB_ENV
           echo $VM_IP
           
-
-
-      # Creates or updates the resources given the current state 
-      - name: SSH
-        env:
-          GOOGLE_CLOUD_KEYFILE_JSON: ${{secrets.GOOGLE_CREDENTIALS}}
-        run: | 
-          gcloud compute ssh --project=${{vars.GOOGLE_PROJECT_NAME}} --zone=${{vars.GOOGLE_ZONE}} skytjenester-vm
-
-          sudo apt update
-          sudo apt install -y docker.io
-          sudo systemctl start docker
-          sudo systemctl enable docker
-
-          sudo docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{vars.DOCKER_ACCESS_TOKEN}}
-          sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}:latest
-          sudo docker run -p 5000:5000 -e WEBSERVER_PORT=5000 ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}
-
-
-
-  
       
-      # # Runs the new application version
-      # - name: SSH and run the new application
-      #   uses: appleboy/ssh-action@v1.0.0
-      #   with:
-      #       host: ${{env.VM_IP}}
-      #       username: ${{vars.SSH_USERNAME}}
-      #       passphrase: ${{secrets.SSH_PASSPHRASE}}
-      #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #       script: |
+      # Runs the new application version
+      - name: SSH and run the new application
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+            host: ${{env.VM_IP}}
+            username: ${{vars.SSH_USERNAME}}
+            passphrase: ${{secrets.SSH_PASSPHRASE}}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            script: |
+              sudo apt update
+              sudo apt install -y docker.io
+              sudo systemctl start docker
+              sudo systemctl enable docker
+
+              sudo docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{vars.DOCKER_ACCESS_TOKEN}}
+              sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}:latest
+              sudo docker run -p 5000:5000 -e WEBSERVER_PORT=5000 ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}
