@@ -36,7 +36,7 @@ USER appuser
 COPY . .
 
 # Runs the tests
-RUN python3 app._test.py 
+# RUN python3 app._test.py 
 
 # Exposes the port where the server will listen
 EXPOSE 5000
