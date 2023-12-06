@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    return "Hello CI/CD"
+    return "Hello CI/CD2"
 
 
 # @app.route("/widgets")
