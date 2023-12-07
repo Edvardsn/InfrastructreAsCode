@@ -1,6 +1,6 @@
-name: deploy
+# Workflow for building and deploying to GCP 
+name: build-deploy
 
-# TODO refactor jobs til stegvis
 on:
   push:
     branches:
@@ -19,9 +19,9 @@ jobs:
       # Builds and pushes the docker image to the Docker Hub
       - name: Build and push Docker image
         run: |
-          docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_ACCESS_TOKEN}}
-          docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
+          docker login -u ${{vars.DOCKER_USERNAME}} -p ${{secrets.DOCKER_ACCESS_TOKEN}}
+          docker build . --file Dockerfile --tag ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}
+          docker push ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
 
       # Google cloud CLI
       - name: Set up Google Cloud SDK
@@ -58,7 +58,7 @@ jobs:
          terraform apply -auto-approve -input=false -var "SSH_PUB_KEY=${{vars.SSH_PUB_KEY}}" -var "ZONE=${{vars.GOOGLE_ZONE}}" -state="gs://${TF_BACKEND_BUCKET}/default.tfstate"
 
       # Retrives the IP from the VM as it is ephemeral this is done after the terraform process
-      - name: Get the VM IP Address and do ssh
+      - name: Get the VM IP Address
         id: get-vm-ip
         run: |
           echo gcloud compute instances describe skytjenester-vm --zone ${{vars.GOOGLE_ZONE}} 
@@ -83,6 +83,6 @@ jobs:
               sudo systemctl enable docker
 
               sudo docker rm ${{vars.DOCKER_CONTAINER_NAME}}
-              sudo docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{vars.DOCKER_ACCESS_TOKEN}}
-              sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}:latest
-              sudo docker run -d -p 5000:5000 -e WEBSERVER_PORT=5000 --name ${{vars.DOCKER_CONTAINER_NAME}} ${{secrets.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}
+              sudo docker login -u ${{vars.DOCKER_USERNAME}} -p ${{vars.DOCKER_ACCESS_TOKEN}}
+              sudo docker pull ${{vars.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}:latest
+              sudo docker run -d -p 5000:5000 -e WEBSERVER_PORT=5000 --name ${{vars.DOCKER_CONTAINER_NAME}} ${{vars.DOCKER_USERNAME}}/${{vars.DOCKER_IMAGE_NAME}}

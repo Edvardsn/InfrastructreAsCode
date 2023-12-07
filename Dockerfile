@@ -1,4 +1,10 @@
-# syntax=docker/dockerfile:1
+# Docker file inspired by the following:
+
+# Agarwal, G. (2021) Modern DevOps Practices. 1st edn. Packt Publishing. 
+# Available at: https://www.perlego.com/book/2931160/modern-devops-practices-pdf 
+
+# https://docs.docker.com/language/python/containerize/
+
 
 ARG PYTHON_VERSION=3.11.4
 FROM python:${PYTHON_VERSION}-slim as base

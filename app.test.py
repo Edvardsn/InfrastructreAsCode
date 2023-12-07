@@ -1,9 +1,10 @@
 import unittest
 from app import app
 
-
 """
-Tests that the HTTP packet recieved is OK status code 200.
+Tests:
+- HTTP packet recieved is OK status code 200 at landing page
+- HTTP packet is returned with status code 404 at unavailable site.
 
 """
 

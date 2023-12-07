@@ -1,7 +1,14 @@
+# Backend configuration used for resource state
 terraform {
   backend "gcs" {
     bucket = "skytjenester-bucket"
   }
+}
+
+# Information related to the provider
+provider "google" {
+  project = "skytjenester"
+  region  = "europe-west1"
 }
 
 # The public SSH key to assign to the VM
@@ -13,12 +20,6 @@ variable "SSH_PUB_KEY" {
 variable "ZONE" {
   type = string
 }
-# Information related to the provider
-provider "google" {
-  project = "skytjenester"
-  region  = "europe-west1"
-}
-
 # The virual machine
 resource "google_compute_instance" "skytjenester_vm" {
   name         = "skytjenester-vm"
