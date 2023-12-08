@@ -8,8 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
-    # Arbituary version that is LTS.
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     environment: skytjenester-H23
 
     steps:
@@ -38,6 +37,8 @@ jobs:
       # Terraform 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
 
       # Initialize Terraform
       - name: Terraform Initialize  
