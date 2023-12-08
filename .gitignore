@@ -2,3 +2,5 @@
 .env
 /.vscode
 terraform/.terraform
+/.terraform
+.terraform.lock.hcl
