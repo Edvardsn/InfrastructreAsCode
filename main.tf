@@ -1,4 +1,4 @@
-# Backend configuration used for resource state
+# Backend configuration used for resource state saved in GCP bucket.
 terraform {
   backend "gcs" {
     bucket = "skytjenester-bucket"
